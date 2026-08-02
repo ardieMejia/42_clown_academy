@@ -1,0 +1,44 @@
+
+/usr/include/bits/stdio2.h,1346
+#define _BITS_STDIO2_H 20,853
+extern int __sprintf_chk 26,977
+# define sprintf(43,1616
+__NTH 49,1784
+extern int __snprintf_chk 58,2042
+#  define snprintf(76,2699
+__NTH 82,2882
+extern int __fprintf_chk 93,3148
+extern int __printf_chk 95,3257
+extern int __vfprintf_chk 96,3333
+extern int __vprintf_chk 98,3460
+fprintf 103,3604
+printf 110,3791
+#  define printf(115,3940
+#  define fprintf(117,4018
+vprintf 122,4146
+vfprintf 132,4410
+extern int __dprintf_chk 139,4603
+extern int __vdprintf_chk 141,4740
+dprintf 147,4948
+#   define dprintf(153,5119
+vdprintf 158,5241
+extern int __asprintf_chk 166,5414
+     __THROW __attribute__ ((__format__ (__printf__, 3, 4))) __wur;168,5519
+extern int __vasprintf_chk 169,5587
+     __THROW __attribute__ ((__format__ (__printf__, 3, 0))) __wur;171,5711
+extern int __obstack_printf_chk 172,5779
+extern int __obstack_vprintf_chk 176,5972
+__NTH 184,6239
+__NTH 191,6432
+__NTH 199,6632
+#   define asprintf(206,6874
+#   define __asprintf(208,6967
+#   define obstack_printf(210,7062
+__NTH 215,7208
+__NTH 222,7407
+extern char *__gets_chk __gets_chk234,7666
+extern char *__fgets_chk __fgets_chk248,8081
+extern size_t __fread_chk 272,9090
+extern char *__fgets_unlocked_chk __fgets_unlocked_chk300,10131
+# undef fread_unlocked326,11257
+extern size_t __fread_unlocked_chk 327,11280
