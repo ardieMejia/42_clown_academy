@@ -1,6 +1,8 @@
 
 
 #include <stdio.h>
+// #include <cmath>
+#include "string.h"
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -136,38 +138,53 @@ void _add_two(uintptr_t *num){
 	return ;
 }
 
+static int read_offset = 0;
+static int next_offset = 0;
+static void * whole_buffer = NULL;
 
 void * make_buffer(){
-	void * whole_buffer = malloc(5000);
-	return whole_buffer;
+	if( whole_buffer == NULL)
+	{
+		void * whole_buffer = malloc(5000);
+		return whole_buffer;
+	}
 }
 
+int get_read_offset(char * found_ptr){
+
+	return 5;
+}
 
 int ardie_strchr_plus(int file_id, char * whole_buffer, char c, int *offset)
 {
 
-
 	int size_read = read(file_id, whole_buffer + *offset, BUFFER_SIZE);
-	if( !strrchr(whole_buffer + *offset, '\n'))
+	printf("\n whole buffer%p\n", whole_buffer + *offset);
+
+	if( strchr(whole_buffer + *offset, '\n'))
 	{
-		*offset += BUFFER_SIZE;
-	}else{
-		*offset = 0;
-		return size_read;
+		char * found_ptr = strchr(whole_buffer + *offset, '\n');
+		*found_ptr = '\0';
+		*offset = found_ptr - whole_buffer;
+		next_offset = found_ptr - whole_buffer;
+		printf("\n %d\n", *offset);
+		return 0;
 	}
+
+	read_offset = next_offset;
+	*offset += BUFFER_SIZE;
 	
-	*(whole_buffer + *offset - 1) = '\n';
+	
+	// *(whole_buffer + *offset - 1) = '\n';
 
 
-
-	// char * temp = strchr(whole_buffer, '\0');
 
 
 			
 
-	// int size_read = 10;
 
-	return size_read;
+
+	return 1;
 	
 }
 
@@ -178,18 +195,91 @@ char * get_next_line(int file_id){
 	void * whole_buffer = make_buffer();
 	char c = 'm';
 
-	int size_read = ardie_strchr_plus(file_id, (char *)whole_buffer, c, &offset);
-	size_read = ardie_strchr_plus(file_id, (char *)whole_buffer, c, &offset);
+	while(ardie_strchr_plus(file_id, (char *)whole_buffer, c, &offset)){
+		
+	}
+
+	return whole_buffer + read_offset;
+
 	
-	return whole_buffer;
 	
 	// return (char *)whole_buffer;
 }
 
 
+char * compose_change_me(char * astring1){
+	int _i = 0;
+	int _j = 0;
+	int ij = 0;
+	char * add = "ardies";
+	// char * total;
+	
+	while(astring1[_i] != '\0' ){
+		_i++;
+	}
+	while(add[_j] != '\0' ){
+		_j++;
+	}
+
+	// total = malloc(_i + _j + 1);
+	astring1 = realloc(astring1, _i + _j + 1);
+
+	int j = 0;
+	while(j < _j){
+		astring1[_i+j] = add[j];
+		j++;
+	}
+
+	return astring1;
+
+}
+
 
 int main(void){
 
+
+
+
+
+	char * astring1 = malloc(5 + 1);
+	astring1 = strcpy(astring1, "12345");
+
+
+	astring1 = compose_change_me(compose_change_me(astring1));
+	printf("\n astring1 %s\n", astring1);
+
+
+	// char * mstring1 = malloc(5 + 1);
+	// mstring1 = strcpy(mstring1, "12345");
+	// boring_change_me(mstring1);
+
+
+	return 0;
+	
+
+	// ==================================================
+
+
+	char * m_original = "123";
+	char * m_new = malloc(1 * 3 + 1);
+
+	strcpy(m_new + 1, m_original);
+
+	printf("\n m_new: %s\n", m_new);
+
+	free(m_new);
+	// free(m_original);
+
+	return 0;
+
+
+
+
+	
+
+
+
+	
 	
 
 	// char * testtest = malloc(100);
@@ -206,14 +296,24 @@ int main(void){
 	// return 0;
 
 
+
+
+	
+	
 	int file_id = open("testfile.txt", O_RDWR);
 	
 	char * line = get_next_line(file_id);
 	
 	printf("\n get_next_line: \n");
 	printf("\n %s\n", line);
+
 	
-	free(line);
+	char * line2 = get_next_line(file_id);
+	
+	printf("\n get_next_line: \n");
+	printf("\n %s\n", line2);
+	
+	// free(line);
 	
 	
 	return 0;

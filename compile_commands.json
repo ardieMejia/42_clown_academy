@@ -1,0 +1,13 @@
+[
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-c",
+      "-g",
+      "-m64",
+      "delete.c"
+    ],
+    "directory": "/home/ardie/my-trash/delete/c_practice/working",
+    "file": "/home/ardie/my-trash/delete/c_practice/working/delete.c"
+  }
+]
