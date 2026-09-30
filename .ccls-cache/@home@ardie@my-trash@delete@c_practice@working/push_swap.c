@@ -16,78 +16,81 @@
 
 
 
-int get_max(int array[], int n)
-{
-		// sizeof(arr) / sizeof(arr[0])
-	int i = 0;
-	int max = array[0];
-	while(i < n )
+
+
+
+
+
+// int * ra(int stack_a[]){
+// 	printf("\n we are rotating %d\n", stack_a[0]);
+// }
+
+
+int order(int * stack_a, int index1, int index2, int index3){
+	if (stack_a[0] == index1 && stack_a[1] == index2 && stack_a[2] == index3)
 	{
-		if( array[i] > max)
-			max = array[i];
-		i++;
+		return 1;
 	}
+	return 0;
 }
 
-int get_min(int array[], int n)
+void sa(int * stack_a)
 {
-	int i = 0;
-	int min = array[0];
-	while(i < n )
-	{
-		if( array[i] < min)
-			min = array[i];
-		i++;
-	}
+	int temp = stack_a[0];
+	stack_a[0] = stack_a[1];
+	stack_a[1] = temp;
 }
 
-int * normalize_to_3(int stack_a[], n){
-	while(stack_a)
-	{
+
+void add_to_op_list(char * list_of_operations, char * string_add)
+{
+	char * temp_list_of_operations = realloc(list_of_operations, (strlen(list_of_operations) + 4)); 
+	int j = strlen(temp_list_of_operations);
+	list_of_operations = temp_list_of_operations;
+	list_of_operations[j] = string_add[0];
+	list_of_operations[j+1] = string_add[1];
+	list_of_operations[j+2] = ' ';
+	list_of_operations[j+3] = '\0';
+}
+
+
+void sort_3_swap_and_append(int *stack_a, char * list_of_operations){
+
+	if (order(stack_a, 2, 1, 3)){
+		sa(stack_a);
+		add_to_op_list(list_of_operations, "ra");
+	}
+	// int temp = stack_a[0];
+	// stack_a[0] = stack_a[1];
+	// stack_a[1] = temp;
+
 		
-	}
-}
 
-void order(int * n_stack_a, int index1, int index2, int index3)
-{
-	int equals = 0;
-	if(n_stack_a[0] = ){
-		
-	}
-
-	return equals;
-}
-
-int * ra(int stack_a[]){
-	printf("\n we are rotating %d\n", stack_a[0]);
-}
-
-int * sort_array(int stack_a[])
-{
-	if(order_equal(normalize_to_3(stack_a), 3,2,1))
-	{
-		ra(stack_a);
-		ra(stack_a);
-	}	
 }
 
 
 void display(int stack_a[])
 {
 	printf("\n ================================================== \n");
+	int i = 0;
 	while(i < 3){
 		printf("%d \n", stack_a[i]);
-		i++=;
+		i++;
 	}
 	printf("\n ================================================== \n");
 }
 
-int main (int argc, char ** argv){
-	int stack_a[] = {1, 2, 3};
-	sort_array(stack_a);
+int main (){
+	static char * list_of_operations = NULL;
+	int stack_a[] = {2, 1, 3};
 
-	display(stack_a);
-	
+	list_of_operations = malloc(sizeof(char) * 1);
+	bzero(list_of_operations, 1);
+	sort_3_swap_and_append(stack_a, list_of_operations);
+
+	printf("\n list of op: %s\n", list_of_operations);
+
+	printf("\n stack_a %d %d %d\n", stack_a[0], stack_a[1], stack_a[2]);
 
 	return 0;
 	
