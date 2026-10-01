@@ -1,0 +1,53 @@
+* This is just a temporary readme, becoz I hate AI, and I hate 42KL, but what to do becoz this place is a cult.
+#+begin_src c
+
+  // Evaluates the exact shape of any 3 numbers based on greater/less than relationships
+bool is_shape(int *stack, bool first_gt_second, bool second_gt_third, bool first_gt_third) {
+    return ((stack[0] > stack[1]) == first_gt_second &&
+            (stack[1] > stack[2]) == second_gt_third &&
+            (stack[0] > stack[2]) == first_gt_third);
+}
+
+// Then your sorting logic looks beautifully clean like this:
+void sort_three(int *stack) {
+    if (is_shape(stack, true, false, true)) { // e.g., [3, 1, 2] (3>1 is true, 1>2 is false, 3>2 is true)
+        ra(stack);
+    }
+    // ... and so on for the other permutations
+}
+
+#+end_src
+* What do we do now:
+#+begin_src c
+
+    ra(){
+  /* gets location of item */
+  /* if an item is closerToTop AND is not pushable */
+  /* we ra that item */
+  }
+
+
+  rra(){
+  /* gets location of item */
+  /* if an item is closerToBottom AND is not pushable */
+  /* we rra that item */
+  }
+
+
+  order(a, 1,2,3)
+
+
+  while(ra(a, item, closerToTop)){
+      append_to_list("ra")
+  }
+
+  while(rra(a, item, closerToBottom)){
+      append_to_list("rra")
+  }
+
+
+  /* misnomer: */
+  /* function pointer: a conditional to be used inside a function, for EACH item */
+
+
+#+end_src
