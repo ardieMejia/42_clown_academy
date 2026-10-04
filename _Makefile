@@ -1,0 +1,23 @@
+TARGET=a.out
+CC=gcc
+OBJECTS=input_cleaner.o
+
+$(TARGET): $(OBJECTS) $()
+	ar rc libinput_cleaner.a libinput_cleaner.o test.o
+	$(CC) -g -m64 push_swap.c -libinput_cleaner -Werror -Wall -Wextra
+
+
+$(objects): %.o: %.c
+	$(CC) -shared -c -fPIC $^ -o $@
+
+
+
+
+
+
+
+# Note: all.c does not use this rule because Make prioritizes more specific matches when there is more than one match.
+
+
+clean:
+	rm -f  *.o

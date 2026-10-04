@@ -145,4 +145,80 @@ while(pa(stackB->nodes, norm_index, poppable){
 * NOTE (mostly to explain if someone asks why the functions are like this)
 * we are always looping through each items, this means we run through ra(), even when the item might be located in stack b
 * this doesnt matter, coz maintaing the function interface (ra(), etc...) and maintaining function whiles in order (while(rr), while(rrr)) is more important for our sanity
-* 
+* We need a beautiful concatenating feature for our BENCH
+* We need [[https://github.com/Niimphu/push_swap_visualiser][THIS visualizer]] coz arranging output is too much of a hassle
+* We need to add a flag for turning on and off inputs, not just for the --bench and --count-only
+
+
+
+Solving the 42 School push_swap project using Lisp logic—specifically functional programming principles—is a brilliant way to write a clean, bug-free, and highly expressive solution.
+While you ultimately have to write the project in C, you can treat your C code as a "Lisp runtime." By implementing immutable data structures, recursion, and higher-order concepts, you can abstract away the messy pointer manipulation of two doubly-linked lists (A and B) and focus purely on the sorting algorithm.
+Here is how you can map Lisp logic to C to conquer push_swap.
+
+1. The Core Philosophy: Immutable States & Pure Functions
+
+In pure Lisp, lists are immutable. Instead of modifying a list in place, operations return a new list.
+In C, we usually mutate nodes directly, which leads to edge-case bugs (e.g., forgetting to set a next or prev pointer to NULL). To apply Lisp logic:
+• Treat your stack operations (sa, pb, ra, etc.) as pure functions that take a state (Stack A and Stack B) and return a new state.
+• Write a robust "List" API in C that mimics Lisp's car (head) and cdr (tail) to keep your logic clean.
+
+Visualizing the C-to-Lisp Mapping
+
+Lisp Concept	C Implementation for push_swap
+car (Get first element)	stack->value or stack->index
+cdr (Get rest of the list)	stack->next
+cons (Prepending an element)	push operation (used in pa and pb)
+Recursion	Replacing while loops with recursive functions for searching and sorting
+
+2. Choosing the Algorithm: The "Turk Sort" or "Mechanical Sort"
+
+Lisp thrives on algorithms that evaluate the "cost" of an operation before executing it, much like evaluating a Lisp expression. The Turk Sort (or any cost-based greedy algorithm) fits functional logic perfectly.
+The Lisp-style approach to Turk Sort:
+1. Map/Evaluate Costs: For every element in Stack A, calculate the exact number of moves (the "cost") required to push it into its correct sorted position in Stack B.
+2. Reduce/Find Minimum: Look at the calculated costs and select the element with the absolute lowest cost.
+3. Execute: Perform the moves for that specific element.
+4. Recurse: Repeat until Stack A has only 3 elements left, sort those 3, and then push everything back from B to A.
+
+3. Structuring the Logic (Lisp Thinking in C)
+
+
+Step A: Coordinate Compression (Pre-sorting)
+
+Before doing anything, simplify the input numbers. Convert the raw integers into their sorted ranks (indexes) from 0 to N-1. This turns a Lisp-like list comparison into simple math.
+• Input: [42, -5, 100, 0] → Mapped to Indexes: [2, 0, 3, 1]
+
+Step B: The Cost Evaluation Function (map-cost)
+
+Instead of writing heavy loop logic, write a function that acts like a mapper. It takes a node and returns a structural "cost profile".
+c
+typedef struct s_cost {
+    int rx;  // Rotate A directions (positive for ra, negative for rra)
+    int ry;  // Rotate B directions (positive for rb, negative for rrb)
+    int total;
+} t_cost;
+Use code with caution.
+You write a pure function: t_cost calculate_cost(t_node *node, t_stack *a, t_stack *b);
+
+Step C: Finding the Cheapest Node (reduce)
+
+In Lisp, you would use a reduce or foldl function to find the minimum. In C, pass your stack through a recursive or highly linear loop that compares current_node->cost against cheapest_node->cost.
+
+Step D: Optimizing Operations (Shared Rotations)
+
+Lisp logic looks for patterns to optimize expressions. If both Stack A and Stack B need to rotate in the same direction (rx > 0 and ry > 0), you can combine them into rr or rrr.
+• If rx = 3 and ry = 5: Do rr 3 times, then rb 2 times.
+• If rx = -2 and ry = -4: Do rrr 2 times, then rrb 2 times.
+
+4. How to Structure Your C Code Files like a Lisp Program
+
+To keep your code elegant and compliant with the 42 Norm, modularize it by functional responsibility:
+• lisp_api.c: Contains your car, cdr, cons, and list length functions.
+• operations_*.c: The raw mechanics of push, swap, rotate, and reverse_rotate.
+• cost_evaluator.c: Pure math functions that calculate target positions and instruction costs without touching the actual stacks.
+• sort_engine.c: The main recursive engine that finds the cheapest node, executes the moves, and repeats.
+
+5. Why this guarantees a 100% Score
+
+• Low Move Count: The cost-based greedy algorithm routinely sorts 100 numbers in fewer than 700 moves and 500 numbers in fewer than 5500 moves, easily passing the highest benchmark for full points.
+• Extremely Low Bug Rate: Because you separate the calculation of moves from the execution of moves, you can easily print and debug your math before your program ever mutates the stacks.
+If you are stuck on a specific phase of the project, let me know! I can help you map out the cost calculation math, explain how to handle the final 3-element base case, or design the pointer mechanics for your stack operations.

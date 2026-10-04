@@ -1,6 +1,6 @@
 .dir-locals.el
 a.out
-.ccls-cach/
+.ccls-cache/
 *o
 compile_commands.json
 TAGS
