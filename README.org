@@ -222,3 +222,82 @@ To keep your code elegant and compliant with the 42 Norm, modularize it by funct
 • Low Move Count: The cost-based greedy algorithm routinely sorts 100 numbers in fewer than 700 moves and 500 numbers in fewer than 5500 moves, easily passing the highest benchmark for full points.
 • Extremely Low Bug Rate: Because you separate the calculation of moves from the execution of moves, you can easily print and debug your math before your program ever mutates the stacks.
 If you are stuck on a specific phase of the project, let me know! I can help you map out the cost calculation math, explain how to handle the final 3-element base case, or design the pointer mechanics for your stack operations.
+* cost stack:
+#+begin_src c
+
+    #typedef struct s_stack
+  {
+      int             value;
+      int             index;
+      int             push_cost;
+      bool            above_median;
+      bool            cheapest;
+      struct s_stack  *target_node;
+      struct s_stack  *next;
+      struct s_stack  *prev;
+  }                   t_stack;
+
+  // Function to calculate the push cost for each node in Stack A
+  void    cost_analysis_a(t_stack *a, t_stack *b)
+  {
+      int len_a;
+      int len_b;
+
+      len_a = stack_len(a);
+      len_b = stack_len(b);
+      while (a)
+      {
+          // Cost to bring node to the top of Stack A
+          a->push_cost = a->index;
+          if (!(a->above_median))
+              a->push_cost = len_a - (a->index);
+
+          // Cost to bring target node to the top of Stack B
+          if (a->target_node->above_median)
+              a->push_cost += a->target_node->index;
+          else
+              a->push_cost += len_b - (a->target_node->index);
+
+          a = a->next;
+      }
+  }
+
+  
+#+end_src
+* This is just pseudo:
+#+begin_src c
+
+  void r_till_top(){
+	if(currentinex is top)
+		return;
+	while()
+	{
+		if(clsoe_to_top())
+			ra();
+		else
+			rra();
+	}			
+}
+
+
+int get_lowest_cost(){
+
+	norm_index_next_current_b;
+}
+
+
+void while_more_than_3(Stack * game_stack)
+{
+	norm_index_current = get_lowest_cost();
+	while(lenget of stack a is more thn 3){
+		r_till_top();
+		pb(game_stack);
+	}		
+}
+
+
+void push_2_to_b(game_stack){
+	
+}
+
+#+end_src
