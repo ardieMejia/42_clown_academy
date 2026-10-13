@@ -245,24 +245,24 @@ void empty_stack_a(MyStack *stackA, int current_index, char * list_of_operations
 
 
 int * get_list_of_numbers(char ** filtered_input_split, int length){
-	int *test = (int * )malloc(sizeof(int) * length);
+	int * list_of_numbers = (int * )malloc(sizeof(int) * length);
 	// char * temp = NULL;
 
-	printf("\n filtered_input_split %c\n", filtered_input_split[2][0]);
+	// printf("\n filtered_input_split %c\n", filtered_input_split[2][0]);
 	int i = 0;
 	while(i < length){
-		test[i] = ft_atoi(filtered_input_split[i]);
+		list_of_numbers[i] = ft_atoi(filtered_input_split[i]);
 		// int	ft_atoi(const char *nptr)
 		i++;
 	}
 
 
-	i = 0;
-	while(i < length){
-		printf("\n list of numbers: %d\n", test[i]);
-		i++;
-	}
-	return test;
+	// i = 0;
+	// while(i < length){
+	// 	printf("\n list of numbers: %d\n", list_of_numbers[i]);
+	// 	i++;
+	// }
+	return list_of_numbers;
 }
 
 
@@ -333,6 +333,21 @@ void display_stack_index(Stack *game_stack){
 	}
 }
 
+void display_stack_operations(char * list_of_operations){
+
+
+	// char * test = strdup("hallsd\nlsd");
+	char * test = ft_strdup("hallsd\nlsd");
+
+	
+
+	list_of_operations[2] = 's';
+
+	// write(int __fd, const void *__buf, size_t __n);
+	write(0,test , ft_strlen(test));
+		
+}
+
 void display_stack_cost(Stack *game_stack){
 
 	Blob *current_blob_pointer = game_stack->stackA;
@@ -376,13 +391,12 @@ int get_length_filtered_input(char * filtered_input)
 	}
 
 
-	printf("\n length %d\n", i);
+	// printf("\n length %d\n", i);
 	// free(numbers_with_spaces);
 	free_split_string(numbers_with_spaces);
 	return i;
 
 }
-
 
 
 void free_game(Stack *game_stack){
@@ -394,16 +408,26 @@ void free_game(Stack *game_stack){
 		free(current);
 		current=tracker;
 	}
+	
+	tracker = game_stack->stackB;
+	current = game_stack->stackB;
+	
+	while(tracker){
+		tracker=current->next;
+		free(current);
+		current=tracker;
+	}
+	
+
+
+	
 
 	free(game_stack);
 	game_stack=NULL;
 
 	
+	
 }
-
-
-
-
 
 
 
@@ -438,8 +462,8 @@ void fill_norm_index(Stack * game_stack)
 		}
 		i++;
 	}
-	printf("\n temp_array %d\n", temp_array[0]);
-	printf("\n temp_array %d\n", temp_array[1]);
+	// printf("\n temp_array %d\n", temp_array[0]);
+	// printf("\n temp_array %d\n", temp_array[1]);
 
 	i=0;
 	j=0;
@@ -494,8 +518,8 @@ void fill_latest_cost(Stack * game_stack)
 	Blob * current_tracker = game_stack->stackA;
 	while(current_tracker)
 	{
-		printf("\n this should show index %d \n", get_index_from_norm(game_stack->stackA, current_tracker->norm_index));
-		printf("\n norm_index %d \n", current_tracker->norm_index);
+		// printf("\n this should show index %d \n", get_index_from_norm(game_stack->stackA, current_tracker->norm_index));
+		// printf("\n norm_index %d \n", current_tracker->norm_index);
 
 		if (get_index_from_norm(game_stack->stackA, current_tracker->norm_index) < get_stack_length(game_stack->stackA)/2)
 			current_tracker->cost = current_tracker->index;
@@ -509,7 +533,7 @@ void fill_latest_cost(Stack * game_stack)
 
 int get_lowest_cost(Stack * game_stack, int amount_to_calculate)
 {
-	fill_latest_cost(game_stack);
+	game_stack->stackA->value = 4;
 	amount_to_calculate = 4;
 	printf("\n amount to cauflate %d\n", amount_to_calculate);
 	return 99;
@@ -519,6 +543,7 @@ int get_lowest_cost(Stack * game_stack, int amount_to_calculate)
 void while_more_than_3(Stack * game_stack)
 {
 	int amount_to_calculate = 2;
+	fill_latest_cost(game_stack);
 	int norm_index_current = get_lowest_cost(game_stack, amount_to_calculate);
 	printf("\n norm_index_current %d\n", norm_index_current);
 	// while(lenget of stack a is more thn 3){
@@ -571,18 +596,19 @@ int main (){
 
 
 	int filtered_input_length = get_length_filtered_input(filtered_input);
-	printf("\n filtered_input %d\n", filtered_input_length);
+	// printf("\n filtered_input %d\n", filtered_input_length);
 
 
-	int *list_of_numbers = NULL;
+	// int *list_of_numbers = NULL;
 	
-	list_of_numbers = get_list_of_numbers(filtered_input_split, filtered_input_length);	
 	
 
 	// if(game_stack->stackA != NULL)
 	// 	printf("\n %d\n", game_stack->stackA[0].value);
 
-	Stack *game_stack = create_stack_and_fill_values(list_of_numbers, filtered_input_length);
+	Stack *game_stack = init_stack();
+	int * list_of_numbers = get_list_of_numbers(filtered_input_split, filtered_input_length);
+	fill_stack_values(game_stack, list_of_numbers, filtered_input_length);
 
 	fill_latest_cost(game_stack);
 
@@ -621,6 +647,9 @@ int main (){
 
 	list_of_operations = push_2_to_b(game_stack, list_of_operations);
 
+	display_stack_operations(list_of_operations);
+	
+
 	free(filtered_input);
 	free(list_of_numbers);
 	// free(temp);
@@ -644,7 +673,7 @@ int main (){
 
 	// print_all_moves();
 
-	#ifdef DEBUG
+#ifdef DEBUG
 	display_stack_cost(game_stack);
 	display_stack_values(game_stack);
 	display_stack_index(game_stack);

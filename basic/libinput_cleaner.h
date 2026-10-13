@@ -19,11 +19,13 @@ typedef struct Stack
 {
     struct Blob *stackA;
     struct Blob *stackB;
-    // int *list_of_numbers;
 }Stack;
 
 
-Stack * create_stack_and_fill_values(int *list_of_numbers, int list_of_numbers_length );
+Stack * init_stack();
+    
+
+void fill_stack_values(Stack* game_stack, int * list_of_numbers, int list_of_numbers_length );
 
 int get_index_from_norm(Blob* stack, int norm_index);
 

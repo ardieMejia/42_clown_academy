@@ -2,10 +2,14 @@
 #include <stdlib.h>
 #include "libinput_cleaner.h"
 
-
-Stack * create_stack_and_fill_values(int *list_of_numbers, int list_of_numbers_length )
-{
+Stack * init_stack(){
 	Stack *game_stack = (Stack *)malloc(sizeof(Stack));
+	return game_stack;
+}
+	
+void fill_stack_values(Stack* game_stack, int * list_of_numbers, int list_of_numbers_length )
+{
+
 	int i = 0;
 	Blob *current_pointer = NULL;
 	Blob *tracking_pointer = NULL;
@@ -35,7 +39,7 @@ Stack * create_stack_and_fill_values(int *list_of_numbers, int list_of_numbers_l
 	// free(tracking_pointer);
 	
 
-	return game_stack;
+
 
 
 }

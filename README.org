@@ -301,3 +301,12 @@ void push_2_to_b(game_stack){
 }
 
 #+end_src
+* Combined cost: Psudo code that should work
+#+begin_src c
+
+  combined_cost = if(1st_half && 1st_half) costa - costb
+combined_cost = if(2nd_half && 2nd_half) costa - costb
+combined_cost = if(1st_half && 2nd_half) costa + costb
+combined_cost = if(2nd_half && 1st_half) costa + costb
+
+#+end_src
