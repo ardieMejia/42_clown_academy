@@ -3,15 +3,16 @@ CC=gcc
 # OBJECTS=input_cleaner.o
 
 $(TARGET): subdir
-	$(CC) -g -m64 push_swap.c -Lbasic -linput_cleaner -Llibft -lft -Werror -Wall -Wextra -o push_swap
+	$(CC) -g -m64 push_swap.c -Lgetters -lgetters -Llibstructutils -lstructutils -Llibft -lft -Werror -Wall -Wextra -o push_swap
 
 debug: subdir
-	$(CC) -g -m64 -DDEBUG push_swap.c -Lbasic -linput_cleaner -Llibft -lft -Werror -Wall -Wextra -o push_swap
+	$(CC) -g -m64 -DDEBUG push_swap.c -Lgetters -lgetters -Llibstructutils -lstructutils -Llibft -lft -Werror -Wall -Wextra -o push_swap
 
 
 subdir:
-	$(MAKE) -C basic
+	$(MAKE) -C libstructutils
 	$(MAKE) -C libft
+	$(MAKE) -C getters
 
 
 
@@ -22,8 +23,9 @@ subdir:
 
 clean: $(CLEANALL)
 	rm -f  *.o push_swap
-	$(MAKE) -C basic clean
+	$(MAKE) -C libstructutils clean
 	$(MAKE) -C libft clean
+	$(MAKE) -C getters clean
 
 
 

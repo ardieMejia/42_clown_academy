@@ -1,6 +1,6 @@
-TARGET=libinput_cleaner.a
+TARGET=libfillstruct.a
 CC=gcc
-OBJECTS=libinput_cleaner.o test.o
+OBJECTS=libfillstruct.o test.o
 
 $(TARGET): $(OBJECTS)
 	ar rc $(TARGET) $(OBJECTS)

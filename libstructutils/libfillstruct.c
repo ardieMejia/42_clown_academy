@@ -1,6 +1,13 @@
 
 #include <stdlib.h>
-#include "libinput_cleaner.h"
+#include "test.h"
+#include "libfillstruct.h"
+#include "libfilterinput.h"
+#include "libfree.h"
+#include "../getters/libgetters.h"
+
+
+
 
 Stack * init_stack(){
 	Stack *game_stack = (Stack *)malloc(sizeof(Stack));
@@ -9,7 +16,6 @@ Stack * init_stack(){
 	
 void fill_stack_values(Stack* game_stack, int * list_of_numbers, int list_of_numbers_length )
 {
-
 	int i = 0;
 	Blob *current_pointer = NULL;
 	Blob *tracking_pointer = NULL;
@@ -43,6 +49,23 @@ void fill_stack_values(Stack* game_stack, int * list_of_numbers, int list_of_num
 
 
 }
+
+void fill_latest_cost(Stack * game_stack)
+{
+	Blob * current_tracker = game_stack->stackA;
+	while(current_tracker)
+	{
+		if (get_index_from_norm(game_stack->stackA, current_tracker->norm_index) < get_stack_length(game_stack->stackA)/2)
+			current_tracker->cost = get_index_from_norm(game_stack->stackA, current_tracker->norm_index);
+		else
+			current_tracker->cost = get_stack_length(game_stack->stackA) - get_index_from_norm(game_stack->stackA, current_tracker->norm_index);
+		current_tracker = current_tracker->next;
+	}
+	current_tracker=NULL;
+}
+
+
+
 
 int get_index_from_norm(Blob* head, int norm_index)
 {
