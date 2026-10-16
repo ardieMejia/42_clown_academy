@@ -1,56 +1,11 @@
-* This is just a temporary readme, becoz I hate AI, and I hate 42KL, but what to do becoz this place is a cult.
-#+begin_src c
-
-  // Evaluates the exact shape of any 3 numbers based on greater/less than relationships
-bool is_shape(int *stack, bool first_gt_second, bool second_gt_third, bool first_gt_third) {
-    return ((stack[0] > stack[1]) == first_gt_second &&
-            (stack[1] > stack[2]) == second_gt_third &&
-            (stack[0] > stack[2]) == first_gt_third);
-}
-
-// Then your sorting logic looks beautifully clean like this:
-void sort_three(int *stack) {
-    if (is_shape(stack, true, false, true)) { // e.g., [3, 1, 2] (3>1 is true, 1>2 is false, 3>2 is true)
-        ra(stack);
-    }
-    // ... and so on for the other permutations
-}
-
-#+end_src
-* What do we do now:
-#+begin_src c
-
-    ra(){
-  /* gets location of item */
-  /* if an item is closerToTop AND is not pushable */
-  /* we ra that item */
-  }
-
-
-  rra(){
-  /* gets location of item */
-  /* if an item is closerToBottom AND is not pushable */
-  /* we rra that item */
-  }
-
-
-  order(a, 1,2,3)
-
-
-  while(ra(a, item, closerToTop)){
-      append_to_list("ra")
-  }
-
-  while(rra(a, item, closerToBottom)){
-      append_to_list("rra")
-  }
-
-
-  /* misnomer: */
-  /* function pointer: a conditional to be used inside a function, for EACH item */
-
-
-#+end_src
+* How to do the operations INSIDE your head:
+** ra()
+*** get newHead, get oldHead, get lastNode
+*** Time to rewire (only 3 steps, not 2):
+**** Connect oldHead to bottom (last.next = oldHead)
+**** Make oldHead new tail (oldHead-> = NULL)
+**** Update head
+*** We update the head of that linked list LAST, becoz "whats in a name?"
 * Continue:
 #+begin_src c
 
@@ -92,13 +47,7 @@ while(pa(stackB->nodes, norm_index, poppable){
   
 
 #+end_src
-* We need to simplify like this
-#+begin_src c
 
-        WHILE-EACH-ELEMENT(OPERATION((STACK-LIST) CURRENT-INDEX CURRENT-PROPERTY))
-        WHILE-MORE-THAN-3(WHILE-EACH-ELEMENT)
-    
-#+end_src
 * Continue:
 #+begin_src c
 
@@ -310,3 +259,130 @@ combined_cost = if(1st_half && 2nd_half) costa + costb
 combined_cost = if(2nd_half && 1st_half) costa + costb
 
 #+end_src
+* memory:
+#+begin_quote
+
+- a simple while more than 3
+- we fill cost values, calculate total cost (since this means more combinations, n*n, we do only a few), and then push the cheapest combine. In this algorithm, we only calculate from the top, since our algorithm doesnt have ->prev yet
+- we dont have a sort for 3 hardcoded. we calculate the chunk_size = size / chunk_count. (size here is adjusted +offset, to make sure it includes the leftover). We then do the following until it all empties. If the norm_index is between range, we pb, else, we ra. Once pb, if the value pushed is lower median of erange, we rb
+- We push back to a. We get full size. loop from size-1 to 0. We get position of current from norm_index, if the position is lower half , we rrb, else, rb. norm_index--
+
+#+end_quote
+* Tests
+** we should be testing in the case of 1 or only 2 items, it should not crash
+* AI saves me from 42 stress
+#+begin_src c
+
+  Your `simple_while_more_than_3()` function uses `chunk_end` to determine the bucket boundaries, so let's fix both functions to work together.
+
+The main issues are:
+
+- `pb_one_chunk_item()` treats `chunk_end` as the number of elements to push instead of the maximum normalized index.
+- Your loop starts with `chunk_start = 0`, but your current function doesn't use it.
+- `chunk_end` can exceed the maximum normalized index, and the last bucket needs to handle the remaining elements.
+- Your outer loop uses `chunk_start < size`, but the chunk boundaries should be based on normalized indexes, not the current stack size.
+
+## 1\. Fixed `simple_while_more_than_3()`
+
+This version assumes your normalized indexes range from `0` to `size - 1`.
+
+Fixed chunk sorting function
+
+```
+void simple_while_more_than_3(Stack *game_stack)
+{
+	int	size;
+	int	chunk_count;
+	int	chunk_size;
+	int	chunk_start;
+	int	chunk_end;
+
+	size = get_stack_length(game_stack->stackA);
+	chunk_count = 5;
+	if (size < 10)
+	{
+		printf("\nERROR: size too small\n");
+		exit(EXIT_FAILURE);
+	}
+	if (size > 100)
+		chunk_count = 10;
+	chunk_size = (size + chunk_count - 1) / chunk_count;
+	chunk_start = 0;
+	while (chunk_start < size)
+	{
+		chunk_end = chunk_start + chunk_size - 1;
+		if (chunk_end >= size)
+			chunk_end = size - 1;
+		pb_one_chunk_item(game_stack, chunk_start, chunk_end);
+		chunk_start = chunk_end + 1;
+	}
+}
+```
+
+## 2\. Fixed `pb_one_chunk_item()`
+
+This function pushes only the elements whose normalized indexes belong to the current bucket.
+
+Fixed bucket push function
+
+```
+int	pb_one_chunk_item(Stack *game_stack, int chunk_start, int chunk_end)
+{
+	int	size;
+	int	checked;
+	int	norm_at_top;
+
+	size = get_stack_length(game_stack->stackA);
+	checked = 0;
+	while (checked < size)
+	{
+		norm_at_top = get_norm_from_index(game_stack->stackA, 0);
+		if (norm_at_top >= chunk_start && norm_at_top <= chunk_end)
+			pb(game_stack);
+		else
+			ra(game_stack);
+		checked++;
+	}
+	return (0);
+}
+```
+
+### Why this works
+
+Suppose you have 20 elements and 5 buckets:
+
+| Bucket | Normalized indexes |
+| --- | --- |
+| 1 | 0–3 |
+| 2 | 4–7 |
+| 3 | 8–11 |
+| 4 | 12–15 |
+| 5 | 16–19 |
+
+For each bucket, `pb_one_chunk_item()` examines the elements currently in A and pushes matching elements to B. It rotates nonmatching elements to the bottom of A.
+
+**Important:** This assumes `get_norm_from_index()` returns normalized indexes from `0` to `size - 1`, with no duplicates or gaps.
+
+## 3\. One important improvement
+
+Your current function doesn't partially sort stack B yet. You can add a rotation after pushing smaller indexes to B:
+
+```
+if (norm_at_top >= chunk_start && norm_at_top <= chunk_end)
+{
+	pb(game_stack);
+	if (norm_at_top < (chunk_start + chunk_end) / 2)
+		rb(game_stack);
+}
+else
+	ra(game_stack);
+```
+
+This can help organize B so that pushing the largest values back to A becomes more efficient.
+
+**One final detail:** These functions only move elements from A to B. You still need a function to push elements back from B to A in descending order, so that A ends up sorted in ascending order.
+
+#+end_src
+* Maybe we rename some variables 
+** game_stack->stackB ??
+** 

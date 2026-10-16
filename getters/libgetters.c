@@ -48,4 +48,27 @@ int get_lowest_cost(Stack * game_stack, Blob* candidate_from_A, Blob* candidate_
 		current_tracker = current_tracker->next;
 		i++;
 	}
+
+
 }
+
+
+Blob * get_last_blob(Blob * stack){
+
+	Blob * temp_blob = stack;
+	while(temp_blob->next){
+		temp_blob=temp_blob->next;
+	}
+	return temp_blob;
+}
+
+
+Blob * get_next_to_last_blob(Blob * stack){
+	Blob * temp_blob = stack;
+	while(temp_blob->next->next){
+		temp_blob=temp_blob->next;
+	}
+	return temp_blob;	
+}
+
+	
