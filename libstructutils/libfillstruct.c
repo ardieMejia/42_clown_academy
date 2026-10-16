@@ -1,5 +1,6 @@
 
 #include <stdlib.h>
+#include <stdio.h>
 #include "test.h"
 #include "libfillstruct.h"
 #include "libfilterinput.h"
@@ -66,7 +67,11 @@ void fill_latest_cost(Stack * game_stack)
 
 
 
-
+/** we move this to getter
+    we move this to getter
+    we move this to getter
+    we move this to getter
+*/
 int get_index_from_norm(Blob* head, int norm_index)
 {
 	if (!head)
@@ -87,4 +92,31 @@ int get_index_from_norm(Blob* head, int norm_index)
 
 	return i;
 
+}
+
+
+int get_norm_from_index(Blob* blob, int position){
+	int i = 0;
+	int norm_index = 99;
+	while (blob)
+	{
+		if(i == position)
+			return blob->norm_index;
+		i++;
+		blob=blob->next;		
+	}
+	return -99;
+}
+
+int get_value_from_index(Blob* blob, int position){
+	int i = 0;
+	int norm_index = 99;
+	while (blob)
+	{
+		if(i == position)
+			return blob->value;
+		i++;
+		blob=blob->next;		
+	}
+	return -99;
 }

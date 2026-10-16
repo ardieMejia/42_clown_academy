@@ -1,6 +1,6 @@
 TARGET=libstructutils.a
 CC=gcc
-OBJECTS=libfilterinput.o libfillstruct.o test.o libfree.o
+OBJECTS=libfilterinput.o libfillstruct.o test.o libfree.o libdebug.o
 
 $(TARGET): $(OBJECTS)
 	ar rc $(TARGET) $(OBJECTS)

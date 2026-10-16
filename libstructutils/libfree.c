@@ -37,14 +37,10 @@ void free_game(Stack *game_stack){
 		free(current);
 		current=tracker;
 	}
-	
 
-
-	
+	free(game_stack->list_of_operations);
 
 	free(game_stack);
 	game_stack=NULL;
-
-	
 	
 }
