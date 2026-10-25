@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
-#include <stdbool.h>
+
 // #include <stddef.h>
 
 
@@ -17,11 +17,14 @@
 
 #include "libstructutils/libfillstruct.h"
 #include "libstructutils/libfilterinput.h"
-#include "libstructutils/test.h"
 #include "libstructutils/libdebug.h"
 #include "getters/libgetters.h"
 #include "libft/libft.h"
 #include "libstructutils/libfree.h"
+
+
+
+
 
 
 
@@ -386,8 +389,11 @@ int rra(Stack * game_stack){
 	temp_last_blob->next = game_stack->stackA;
 	game_stack->stackA = temp_last_blob;
 	temp_next_to_last_blob->next = NULL;
+
+	char *temp_list_of_operations = ft_strjoin(game_stack->list_of_operations, "rra\n");
+	free(game_stack->list_of_operations);
+	game_stack->list_of_operations = temp_list_of_operations;
 	
-	game_stack->list_of_operations = ft_strjoin(game_stack->list_of_operations, "rra\n");
 	temp_last_blob = NULL;
 	temp_next_to_last_blob = NULL;
 	return 0;
@@ -403,8 +409,13 @@ int rrb(Stack * game_stack){
 	temp_last_blob->next = game_stack->stackB;
 	game_stack->stackB = temp_last_blob;
 	temp_next_to_last_blob->next = NULL;
-	
+
+	// char *temp_list_of_operations = ft_strjoin(game_stack->list_of_operations, "rrb\n");
+	// free(game_stack->list_of_operations);
+	// game_stack->list_of_operations = temp_list_of_operations;
+
 	game_stack->list_of_operations = ft_strjoin(game_stack->list_of_operations, "rrb\n");
+	
 	temp_last_blob = NULL;
 	temp_next_to_last_blob = NULL;
 	return 0;
@@ -423,7 +434,11 @@ int ra(Stack * game_stack){
 	old_head->next = NULL;
 	game_stack->stackA = new_head;
 
+	
 	game_stack->list_of_operations = ft_strjoin(game_stack->list_of_operations, "ra\n");
+
+	
+	// game_stack->list_of_operations = ft_strjoin(game_stack->list_of_operations, "ra\n");
 	old_head = NULL;
 	new_head = NULL;
 	last_blob = NULL;
@@ -443,7 +458,10 @@ int rb(Stack * game_stack){
 	old_head->next = NULL;
 	game_stack->stackB = new_head;
 
+
 	game_stack->list_of_operations = ft_strjoin(game_stack->list_of_operations, "rb\n");
+
+	// game_stack->list_of_operations = ft_strjoin(game_stack->list_of_operations, "rb\n");
 	old_head = NULL;
 	new_head = NULL;
 	last_blob = NULL;
@@ -626,17 +644,37 @@ void simple_push_stupidly_back_a(Stack * game_stack){
 	current_norm = get_stack_length(game_stack->stackB) - 1;
 	// int i = 0;
 	while(current_norm > -1){
-		position = get_index_from_norm(game_stack->stackB, current_norm);
-		while(position != 0){
-			if(position < get_stack_length(game_stack->stackA) / 2)
-				rb(game_stack);
-			else
-				rrb(game_stack);
-			position = get_index_from_norm(game_stack->stackB, current_norm);
-		}
-		pa(game_stack);
-		// size = get_stack_length(game_stack->stackB);
-		current_norm--;
+		   position = get_index_from_norm(game_stack->stackB, current_norm);
+
+        if (position == -1)
+        {
+            printf("Error: normalized index %d not found in stack B\n",
+                current_norm);
+            return;
+        }
+
+        while (position != 0)
+        {
+            if (position < get_stack_length(game_stack->stackB) / 2)
+                rb(game_stack);
+            else
+                rrb(game_stack);
+
+            position = get_index_from_norm(
+                game_stack->stackB, current_norm);
+
+            if (position == -1)
+            {
+                return;
+            }
+        }
+
+        pa(game_stack);
+        current_norm--;
+
+
+	
+
 	}
 }
 
@@ -654,12 +692,10 @@ void start_simple(Stack * game_stack){
 int main (int argc, char **argv){
 
 
-	// static char * list_of_operations;
-	char * filtered_input = NULL;
 	Method method;
+	method = ADAPTIVE;
+	char * filtered_input = NULL;
 	int err;
-
-
 	Stack *game_stack;
 	int * list_of_numbers;
 
@@ -668,57 +704,46 @@ int main (int argc, char **argv){
 		printf("\n no arguments\n");
 		return 0;
 	}
-	
-
-
-
-
-	method = SIMPLE;
 
 	list_of_numbers = NULL;
 
 
 
+	int number_input_start = 1;
 
-
-	if (!is_valid_input(&argc, argv, &list_of_numbers, &method))
+	if(!process_valid_input(argc, argv, &number_input_start, &method))
 	{
-		printf("\n Error\n");
-
 		return 1;
 	}
 
+	if (argc - number_input_start == 0)
+	{		
+		return 0;
+	}
+	list_of_numbers = (int * )malloc(sizeof(int) * (argc - number_input_start));
 
+	if (!is_all_numbers(argv+number_input_start, &list_of_numbers, argc - number_input_start)){
+		free(list_of_numbers);
+		return 1;
+	}	
 
-
-
+	printf("\n he\n");
 	
 	game_stack = init_stack();
-	game_stack->list_of_operations = ft_strdup("");
-	fill_stack_values(game_stack, list_of_numbers, argc);
+	game_stack->list_of_operations = NULL;
+	fill_stack_values(game_stack, list_of_numbers, argc - number_input_start);
 
 	fill_latest_cost(game_stack);
-
-
-
-	
-
-
-
-
 	fill_norm_index(game_stack);
 
 
-
-	
+		
 
 	if(method == SIMPLE){
 		printf("\n simple\n");
 		// experiment_while_more_than_3(game_stack);
 		// simple_while_more_than_3(game_stack);
 		start_simple(game_stack);
-
-		
 	}else if(method == MEDIUM){		
 		err = push_2_to_b(game_stack);
 		if (err)
@@ -739,10 +764,16 @@ int main (int argc, char **argv){
 	
 	free(filtered_input);
 	free(list_of_numbers);
+	list_of_numbers = NULL;
 
 	free_game(game_stack);
 
+
+
 	return 0;
+
+
+
 }
 
 

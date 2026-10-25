@@ -1,8 +1,8 @@
 #include "../libft/libft.h"
-#include "test.h"
 #include "libfillstruct.h"
 #include "libfilterinput.h"
 #include <stdlib.h>
+#include <unistd.h>
 #include <stdio.h>
 #include "../getters/libgetters.h"
 #include "libfree.h"
@@ -86,24 +86,17 @@ int is_all_numbers(char ** filtered_input_split, int ** list_of_numbers, int len
 			current_string++;
 		}
 		(*list_of_numbers)[i] = ft_atoi(filtered_input_split[i]);
-
 		i++;
 	}
-
-
-
-
-
-
 	return 1;
 }
 
 
-
-int is_valid_input(int *argc, char ** argv, int ** list_of_numbers, Method *method)
+int is_valid_input(int *argc, char ** arguments, int ** list_of_numbers, Method *method)
 {
-	char * maybe_option = argv[1];
+	char * maybe_option = arguments[1];
 	char * found = NULL;
+
 
 
 
@@ -112,7 +105,7 @@ int is_valid_input(int *argc, char ** argv, int ** list_of_numbers, Method *meth
 
 
 	if (is_method(maybe_option, method)){
-		argv++;
+		arguments++;
 		(*argc)--;
 	}
 
@@ -122,16 +115,14 @@ int is_valid_input(int *argc, char ** argv, int ** list_of_numbers, Method *meth
 
 
 
+	maybe_option = NULL;
 
-	
 
-	
 
-	if (!is_all_numbers(argv, list_of_numbers, *argc))
+	if (!is_all_numbers(arguments, list_of_numbers, *argc))
 		return 0;
 		
-	// free_split_string(argv);
-	// free(maybe_option);
+
 	return 1;
 
 	
@@ -166,4 +157,101 @@ int is_valid_input(int *argc, char ** argv, int ** list_of_numbers, Method *meth
 // 	return 0;
 // }
 
+int is_valid_option_string(char * flag, Method * method){
+	int result = 1;
 
+
+	if (!ft_strncmp(flag, "--simple", 9))
+		*method = SIMPLE;
+	else if (!ft_strncmp(flag, "--medium", 9))
+		*method = MEDIUM;
+	else if (!ft_strncmp(flag, "--complex", 10))
+		*method = COMPLEX;
+	else if (!ft_strncmp(flag, "--adaptive", 11))
+		*method = ADAPTIVE;
+	else if (!ft_strncmp(flag, "--bench", 8))
+		*method = BENCH;
+	else
+		result = 0;
+	return result;
+}
+
+int is_first_arg_number(int argc, char ** argv)
+{
+	if(ft_atoi(argv[1]) == 0 && !ft_isdigit(argv[1][0]))
+		return 0;
+	return 1;
+}
+
+int is_second_arg_number(int argc, char ** argv)
+{
+	if(ft_atoi(argv[2]) == 0 && !ft_isdigit(argv[2][0]))
+		return 0;
+	return 1;
+}
+
+int process_first_arg_if_valid(int argc, char ** argv, Method * method)
+{
+	if(!is_valid_option_string(argv[1], method))
+	{
+		return 0;
+	}
+	return 1;
+}
+
+int process_second_arg_if_valid(int argc, char ** argv, Method * method)
+{       	
+	if(!is_valid_option_string(argv[2], method))
+	{
+		return 1;
+	}
+	return 0;
+}
+
+int process_valid_input(int argc, char ** argv, int * number_input_start, Method * method)
+{
+	int i = 1;
+	Method temp_method = ADAPTIVE;
+	if (argc == 1){
+		// write(1,"Error\n",6);
+		return 0;
+	}
+	// int number_input_start = 1;
+	if (argc > 1){
+		if (!is_first_arg_number(argc, argv))
+		{
+			if(!process_first_arg_if_valid(argc, argv, method))
+				return 0;
+			else
+				(*number_input_start)++;
+		}
+		if (*method == BENCH){
+			printf("\n bench turned on\n");			
+		}
+		else
+			temp_method = *method;
+		if (argc > 2 && !is_second_arg_number(argc, argv))
+		{
+			if(!process_second_arg_if_valid(argc, argv, method))
+				return 0;
+			else
+				(*number_input_start)++;
+		}
+		if (*method == BENCH)
+			printf("\n bench turned on\n");
+		else
+			temp_method = *method;
+
+		*method = temp_method;
+		
+		// get_method();
+		// get_number_list();
+	}
+	i = *number_input_start;
+	// while(i<argc){
+	// 	printf("\n current num %d\n", ft_atoi(argv[i]));
+	// 	i++;
+	// }
+	printf("\n method: %d\n", *method);
+	return 1;
+}

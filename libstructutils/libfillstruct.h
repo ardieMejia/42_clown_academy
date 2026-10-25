@@ -2,13 +2,18 @@
 
 #define LIBFILLSTRUCT_H
 
+#include <stdbool.h>
+
 
 typedef enum  Method{
     SIMPLE,
     MEDIUM,
     COMPLEX,
-    ADAPTIVE
+    ADAPTIVE,
+    BENCH
 } Method;
+
+
 
 enum Half {
     TOP_HALF,
@@ -23,6 +28,7 @@ typedef struct Blob
     enum Half half;
     // struct Blob * prev;
     struct Blob * next;
+    bool bench;
 }Blob;
 
 

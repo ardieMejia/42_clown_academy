@@ -6,7 +6,7 @@ $(TARGET): subdir
 	$(CC) -g -m64 push_swap.c -Lgetters -lgetters -Llibstructutils -lstructutils -Llibft -lft -Werror -Wall -Wextra -o push_swap
 
 debug: subdir
-	$(CC) -g -m64 -DDEBUG push_swap.c -Lgetters -lgetters -Llibstructutils -lstructutils -Llibft -lft -Werror -Wall -Wextra -o push_swap
+	$(CC) -g -m64 -DDEBUG push_swap.c -Lgetters -lgetters -Llibstructutils -lstructutils -Llibft -lft test.c -Werror -Wall -Wextra -o push_swap
 
 
 subdir:
