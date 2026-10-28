@@ -385,4 +385,84 @@ This can help organize B so that pushing the largest values back to A becomes mo
 #+end_src
 * Maybe we rename some variables 
 ** game_stack->stackB ??
-** 
+* Design wise, push_swap --bench option is an example of "orthogonal" feature in software, since the bench output is considered an "error", it makes our code more "modular"
+* Adding minimally complex without messing up your architecure
+#+begin_src c
+
+  void    sort_complex(t_stack **stack_a, t_stack **stack_b)
+{
+    t_algo_data    data;
+
+    while (stack_size(*stack_a) > 3)
+    {
+        calculate_costs(*stack_a, *stack_b, &data);
+        execute_cheapest_move(stack_a, stack_b, &data);
+    }
+}
+
+#+end_src
+* Minimally adding the complex algo, including only the complex_algo.h
+** First the header file to include, just one
+#+begin_src c
+
+
+  /* complex_algo.h */
+  
+  #ifndef COMPLEX_ALGO_H
+  # define COMPLEX_ALGO_H
+
+  # include "push_swap.h" 
+
+
+  void    sort_complex(t_stack **stack_a, t_stack **stack_b);
+
+  #endif
+
+
+#+end_src
+#+begin_src c
+
+
+  
+#+end_src
+** Next, main C file
+#+begin_src c
+
+
+  /* complex_algo.c */
+
+  #include "complex_algo.h"
+
+  // 1. Keep algorithm-specific data structures local to this file
+  typedef struct s_algo_data
+  {
+      int    min_cost;
+      int    target_pos;
+  }   t_algo_data;
+
+  // 2. Mark all helper functions as static
+  static void    calculate_costs(t_stack *a, t_stack *b, t_algo_data *data)
+  {
+      // Internal complex logic here
+  }
+
+  static void    execute_cheapest_move(t_stack **a, t_stack **b, t_algo_data *data)
+  {
+      // Calls your existing functions: pb(a, b), rra(a), etc.
+  }
+
+  // 3. The only globally accessible function
+  void    sort_complex(t_stack **stack_a, t_stack **stack_b)
+  {
+      t_algo_data    data;
+
+      while (stack_size(*stack_a) > 3)
+      {
+          calculate_costs(*stack_a, *stack_b, &data);
+          execute_cheapest_move(stack_a, stack_b, &data);
+      }
+  }
+
+
+#+end_src
+

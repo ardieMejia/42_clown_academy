@@ -34,3 +34,4 @@ int	ft_strncmp(const char *s1, const char *s2, size_t len)
 		return (*(str1 + n) - *(str2 + n));
 	return (0);
 }
+
