@@ -70,4 +70,63 @@ Blob * get_next_to_last_blob(Blob * stack){
 	return temp_blob;	
 }
 
-	
+int get_less_than_sqrt(int number){
+	int answer = 1;	
+	while(answer <= number){
+		if (answer*answer > number )
+			break;
+
+			
+		answer++;
+	}
+	return answer - 1;
+}
+
+
+int get_value_from_index(Blob* blob, int position){
+	int i = 0;
+	int norm_index = 99;
+	while (blob)
+	{
+		if(i == position)
+			return blob->value;
+		i++;
+		blob=blob->next;		
+	}
+	return -99;
+}
+
+int get_norm_from_index(Blob* blob, int position){
+	int i = 0;
+	int norm_index = 99;
+	while (blob)
+	{
+		if(i == position)
+			return blob->norm_index;
+		i++;
+		blob=blob->next;		
+	}
+	return -99;
+}
+
+int get_index_from_norm(Blob* head, int norm_index)
+{
+	if (!head)
+		abort();
+	int i = 0;
+	Blob *current_pointer = head;
+
+
+
+	while(current_pointer){
+		if (current_pointer->norm_index == norm_index)
+			return i;
+		current_pointer = current_pointer->next;
+		i++;
+	}
+
+	current_pointer = NULL;
+
+	return -1;
+
+}

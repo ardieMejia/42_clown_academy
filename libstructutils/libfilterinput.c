@@ -73,19 +73,19 @@ int is_argument_numbers(char ** the_rest, int argc)
 // }
 
 
-int is_all_numbers(char ** filtered_input_split, int ** list_of_numbers, int length){
+int is_all_numbers(char ** snipped_argv, int ** list_of_numbers, int length){
 	int i = 0;
 	char * current_string;
 
 	while(i < length){
-		current_string = filtered_input_split[i];
+		current_string = snipped_argv[i];
 		while(*current_string){
 			if(!ft_isdigit(*current_string)){
 				return 0;
 			}
 			current_string++;
 		}
-		(*list_of_numbers)[i] = ft_atoi(filtered_input_split[i]);
+		(*list_of_numbers)[i] = ft_atoi(snipped_argv[i]);
 		i++;
 	}
 	return 1;
@@ -160,7 +160,6 @@ int is_valid_input(int *argc, char ** arguments, int ** list_of_numbers, Method 
 int is_valid_option_string(char * flag, Method * method){
 	int result = 1;
 
-
 	if (!ft_strncmp(flag, "--simple", 9))
 		*method = SIMPLE;
 	else if (!ft_strncmp(flag, "--medium", 9))
@@ -203,9 +202,9 @@ int process_second_arg_if_valid(int argc, char ** argv, Method * method)
 {       	
 	if(!is_valid_option_string(argv[2], method))
 	{
-		return 1;
+		return 0;
 	}
-	return 0;
+	return 1;
 }
 
 int process_valid_input(int argc, char ** argv, int * number_input_start, Method * method)
@@ -218,10 +217,12 @@ int process_valid_input(int argc, char ** argv, int * number_input_start, Method
 	}
 	// int number_input_start = 1;
 	if (argc > 1){
+
 		if (!is_first_arg_number(argc, argv))
 		{
-			if(!process_first_arg_if_valid(argc, argv, method))
+			if(!process_first_arg_if_valid(argc, argv, method)){
 				return 0;
+			}
 			else
 				(*number_input_start)++;
 		}
@@ -232,8 +233,9 @@ int process_valid_input(int argc, char ** argv, int * number_input_start, Method
 			temp_method = *method;
 		if (argc > 2 && !is_second_arg_number(argc, argv))
 		{
-			if(!process_second_arg_if_valid(argc, argv, method))
+			if(!process_second_arg_if_valid(argc, argv, method)){
 				return 0;
+			}
 			else
 				(*number_input_start)++;
 		}
@@ -244,14 +246,26 @@ int process_valid_input(int argc, char ** argv, int * number_input_start, Method
 
 		*method = temp_method;
 		
-		// get_method();
-		// get_number_list();
+
 	}
 	i = *number_input_start;
-	// while(i<argc){
-	// 	printf("\n current num %d\n", ft_atoi(argv[i]));
-	// 	i++;
-	// }
+
+	char * current_string;
+
+
+	
+	while(i < argc){
+		current_string = argv[i];
+		while(*current_string){
+			if(!ft_isdigit(*current_string)){
+				return 0;
+			}
+			current_string++;
+		}
+		// (*list_of_numbers)[i] = ft_atoi(argv[i]);
+		i++;
+	}
+	
 	printf("\n method: %d\n", *method);
 	return 1;
 }

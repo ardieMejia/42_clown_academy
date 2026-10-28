@@ -383,8 +383,10 @@ This can help organize B so that pushing the largest values back to A becomes mo
 **One final detail:** These functions only move elements from A to B. You still need a function to push elements back from B to A in descending order, so that A ends up sorted in ascending order.
 
 #+end_src
-* Maybe we rename some variables 
+* REFACTOR 
 ** game_stack->stackB ??
+** get_norm_from_index replace with get_norm_from_position
+** hunt for all words of "norm" or norm_index, and replace it with norm_value
 * Design wise, push_swap --bench option is an example of "orthogonal" feature in software, since the bench output is considered an "error", it makes our code more "modular"
 * Adding minimally complex without messing up your architecure
 #+begin_src c

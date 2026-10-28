@@ -3,10 +3,11 @@ CC=gcc
 # OBJECTS=input_cleaner.o
 
 $(TARGET): subdir
-	$(CC) -g -m64 push_swap.c simple/simple.c medium/medium.c -Lgetters -lgetters -Llibstructutils -lstructutils -Llibft -lft -Lliboperations -loperations -Werror -Wall -Wextra -o push_swap
+	$(CC) -g -m64 push_swap.c simple/simple.c medium/medium.c -Lgetters -lgetters -Llibstructutils -lstructutils -Lliboperations -loperations -Llibft -lft -Werror -Wall -Wextra -o push_swap
 
 debug: subdir
-	$(CC) -g -m64 -DDEBUG push_swap.c simple/simple.c medium/medium.c -Lgetters -lgetters -Llibstructutils -lstructutils -Llibft -lft -Lliboperations -loperations -Werror -Wall -Wextra -o push_swap
+	# $(CC) -g -m64 -DDEBUG push_swap.c simple/simple.c medium/medium.c -Lgetters -lgetters -Llibstructutils -lstructutils -Llibft -lft -Lliboperations -loperations -Werror -Wall -Wextra -o push_swap
+	$(CC) -g -m64 -DDEBUG push_swap.c simple/simple.c medium/medium.c -Lgetters -lgetters -Llibstructutils -lstructutils -Lliboperations -loperations -Llibft -lft -Werror -Wall -Wextra -o push_swap
 
 
 subdir:

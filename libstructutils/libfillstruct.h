@@ -56,8 +56,6 @@ void fill_latest_cost(Stack * game_stack);
 
 
 
-int get_index_from_norm(Blob* stack, int norm_index);
-int get_norm_from_index(Blob* stack, int position);
-int get_value_from_index(Blob* blob, int position);
+
 
 #endif // LIBFILLSTRUCT_H
