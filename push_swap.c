@@ -11,8 +11,7 @@
 /* #include <GL/glew.h> */
 
 #include <string.h>
-#include <time.h>
-#include <assert.h>
+
 
 
 #include "libstructutils/libfillstruct.h"
@@ -21,6 +20,10 @@
 #include "getters/libgetters.h"
 #include "libft/libft.h"
 #include "libstructutils/libfree.h"
+
+
+#include "simple/simple.h"
+#include "medium/medium.h"
 
 
 
@@ -379,121 +382,10 @@ void fill_norm_index(Stack * game_stack)
 }
 
 
-int rra(Stack * game_stack){
-	if (!game_stack->stackA){
-		return 1;
-	}
-
-	Blob * temp_last_blob = get_last_blob(game_stack->stackA);
-	Blob * temp_next_to_last_blob = get_next_to_last_blob(game_stack->stackA);
-	temp_last_blob->next = game_stack->stackA;
-	game_stack->stackA = temp_last_blob;
-	temp_next_to_last_blob->next = NULL;
-	
-	game_stack->list_of_operations = ft_strjoin(game_stack->list_of_operations, "rra\n");
-
-	temp_last_blob = NULL;
-	temp_next_to_last_blob = NULL;
-	return 0;
-}
-
-int rrb(Stack * game_stack){
-	if (!game_stack->stackB){
-		return 1;
-	}
-
-	Blob * temp_last_blob = get_last_blob(game_stack->stackB);
-	Blob * temp_next_to_last_blob = get_next_to_last_blob(game_stack->stackB);
-	temp_last_blob->next = game_stack->stackB;
-	game_stack->stackB = temp_last_blob;
-	temp_next_to_last_blob->next = NULL;
-
-	
-	game_stack->list_of_operations = ft_strjoin(game_stack->list_of_operations, "rrb\n");
-
-	temp_last_blob = NULL;
-	temp_next_to_last_blob = NULL;
-	return 0;
-}
-
-int ra(Stack * game_stack){
-	if (!game_stack->stackA)
-		return 1;
-	if (get_stack_length(game_stack->stackA) == 1)
-		return 0;
-	
-	Blob * old_head = game_stack->stackA;
-	Blob * new_head = game_stack->stackA->next;
-	Blob * last_blob = get_last_blob(game_stack->stackA);
-	last_blob->next = old_head;
-	old_head->next = NULL;
-	game_stack->stackA = new_head;
 
 
-	game_stack->list_of_operations = ft_strjoin(game_stack->list_of_operations, "ra\n");
-
-	old_head = NULL;
-	new_head = NULL;
-	last_blob = NULL;
-	return 0;
-}
-
-int rb(Stack * game_stack){
-	if (!game_stack->stackB)
-		return 1;
-	if (get_stack_length(game_stack->stackB) == 1)
-		return 0;
-	
-	Blob * old_head = game_stack->stackB;
-	Blob * new_head = game_stack->stackB->next;
-	Blob * last_blob = get_last_blob(game_stack->stackB);
-	last_blob->next = old_head;
-	old_head->next = NULL;
-	game_stack->stackB = new_head;
 
 
-	game_stack->list_of_operations = ft_strjoin(game_stack->list_of_operations, "rb\n");
-
-	old_head = NULL;
-	new_head = NULL;
-	last_blob = NULL;
-	return 0;
-}
-
-
-int pb(Stack * game_stack)
-{
-	if (!game_stack->stackA){
-		return 1;
-	}
-
-	Blob * temp_blob = game_stack->stackA;
-	game_stack->stackA = game_stack->stackA->next;
-	temp_blob->next = game_stack->stackB;
-	game_stack->stackB = temp_blob;
-
-	temp_blob = NULL;
-	
-	game_stack->list_of_operations = ft_strjoin(game_stack->list_of_operations, "pb\n");
-	return 0;
-}
-
-int pa(Stack * game_stack)
-{
-	if (!game_stack->stackB){
-		return 1;
-	}
-
-	Blob * temp_blob = game_stack->stackB;
-	game_stack->stackB = game_stack->stackB->next;
-	temp_blob->next = game_stack->stackA;
-	game_stack->stackA = temp_blob;
-
-	temp_blob = NULL;
-	
-	game_stack->list_of_operations = ft_strjoin(game_stack->list_of_operations, "pb\n");
-	return 0;
-}
 
 
 int rr_norm_index_check(Stack *game_stack){
@@ -545,43 +437,7 @@ int rr_norm_index_check(Stack *game_stack){
 	return 0;       
 }
 
-int simple_pb_one_chunk(Stack * game_stack, int chunk_start, int chunk_end)
-{
-	int size = get_stack_length(game_stack->stackA);
-	int moved = 0;
-	printf("\n szie %d\n", size);
-	printf("\n chunk_end %d\n", chunk_end);
-	int norm_at_top;
-	int total_to_push = chunk_end - chunk_start;
 
-	while(moved < total_to_push)
-	{
-		norm_at_top = get_norm_from_index(game_stack->stackA, 0);
-		printf("\n norm_at_top %d\n", norm_at_top);
-		if(norm_at_top > chunk_end){
-			ra(game_stack);
-		}else{
-			pb(game_stack);
-			if (norm_at_top < (chunk_start + chunk_end) / 2)
-				rb(game_stack);
-			moved++;
-		}
-		size = get_stack_length(game_stack->stackA);
-	}
-	return 0;
-}
-
-int  push_2_to_b(Stack * game_stack){
-	int err = 0; 
-	int i = 0;
-	while (i < 2){		
-		err = pb(game_stack);
-		if(err)
-			return 1;
-		i++;
-	}	
-	return 0;
-}
 
 
 
@@ -608,80 +464,6 @@ void experiment_while_more_than_3(Stack * game_stack)
 	candidate_from_B = NULL;
 }
 
-void simple_while_more_than_0(Stack * game_stack)
-{
-	int size = get_stack_length(game_stack->stackA);
-	int chunk_count = 5;
-	if (size < 10)
-	{
-		printf("\n ERROR: size too small\n");
-		exit(EXIT_FAILURE);
-	}
-	if(size > 100)
-		chunk_count = 10;
-	
-	int chunk_size = size / chunk_count;
-	int chunk_start = 0;
-	int chunk_end = chunk_size;
-	while(chunk_start < size){
-		simple_pb_one_chunk(game_stack, chunk_start, chunk_end);
-		chunk_start = chunk_end;
-		chunk_end = chunk_start + chunk_size;
-	}
-}
-
-void simple_push_stupidly_back_a(Stack * game_stack){
-	int current_norm;
-	int position;
-	current_norm = get_stack_length(game_stack->stackB) - 1;
-	// int i = 0;
-	while(current_norm > -1){
-
-		   position = get_index_from_norm(game_stack->stackB, current_norm);
-
-        if (position == -1)
-        {
-            printf("Error: normalized index %d not found in stack B\n",
-                current_norm);
-            return;
-        }
-
-        while (position != 0)
-        {
-            if (position < get_stack_length(game_stack->stackB) / 2)
-                rb(game_stack);
-            else
-                rrb(game_stack);
-
-            position = get_index_from_norm(
-                game_stack->stackB, current_norm);
-
-            if (position == -1)
-            {
-                return;
-            }
-        }
-
-        pa(game_stack);
-        current_norm--;
-
-
-	
-
-
-	}
-}
-
-
-
-void simple_push_all_chunks_to_b(Stack * game_stack){
-	simple_while_more_than_0(game_stack);
-	simple_push_stupidly_back_a(game_stack);	
-}
-
-void start_simple(Stack * game_stack){
-	simple_push_all_chunks_to_b(game_stack);
-}
 
 int main (int argc, char **argv){
 
