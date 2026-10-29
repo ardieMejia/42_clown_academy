@@ -2,13 +2,14 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
-#include "../libstructutils/libfillstruct.h"
-#include "../libstructutils/libfilterinput.h"
-#include "../libstructutils/libdebug.h"
-#include "../getters/libgetters.h"
-#include "../libft/libft.h"
-#include "../libstructutils/libfree.h"
-#include "../liboperations/liboperations.h"
+#include "libstructutils/libfillstruct.h"
+#include "libstructutils/libfilterinput.h"
+#include "libstructutils/libdebug.h"
+#include "getters/libgetters.h"
+#include "libft/libft.h"
+#include "libstructutils/libfree.h"
+#include "liboperations/liboperations.h"
+#include "libhardcode/libhardcode.h"
 #include "medium.h"
 
 
@@ -34,7 +35,9 @@
 void start_medium(Stack * game_stack)
 {
 
-
+	if(process_sort_3(game_stack))
+		return;
+	
 
 	// if (game_stack->stackB)
 	// 	printf("\n test %d\n", game_stack->stackB->value);
@@ -70,7 +73,7 @@ void push_current_upper_chunk_to_b(Stack * game_stack, int lower, int upper)
 	printf("\n upper %d\n", upper);
 	printf("\n lower %d\n", lower);
 	while(size > 0){
-		norm_value_at_top = get_norm_from_index(game_stack->stackA, 0);
+		norm_value_at_top = get_norm_from_position(game_stack->stackA, 0);
 		if (norm_value_at_top >= lower && norm_value_at_top <= upper){
 			printf("\n gets pushed\n");
 			pb(game_stack);

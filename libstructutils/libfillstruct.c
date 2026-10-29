@@ -27,7 +27,7 @@ void fill_stack_values(Stack* game_stack, int * list_of_numbers, int list_of_num
 	while(i < list_of_numbers_length){
 		current_pointer = malloc(sizeof(Blob));		
 		current_pointer->value = list_of_numbers[i];
-		current_pointer->norm_index = list_of_numbers[i];
+		current_pointer->norm = list_of_numbers[i];
 		current_pointer->next = NULL;
 
 		if(game_stack->stackA == NULL)
@@ -59,7 +59,7 @@ void fill_latest_cost(Stack * game_stack)
 	int stack_length = get_stack_length(game_stack->stackA);
 	while(current_tracker)
 	{
-		index = get_index_from_norm(game_stack->stackA, current_tracker->norm_index);
+		index = get_index_from_norm(game_stack->stackA, current_tracker->norm);
 		if (index == -1)
 		{
 			current_tracker = current_tracker->next;

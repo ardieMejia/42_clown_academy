@@ -23,11 +23,11 @@ enum Half {
 typedef struct Blob
 {
     int value;
-    int norm_index; // we should rename this to value_norm_index
+    int norm;
     int cost;
     enum Half half;
-    // struct Blob * prev;
     struct Blob * next;
+    struct Blob * prev;
     bool bench;
 }Blob;
 
@@ -38,15 +38,6 @@ typedef struct Stack
     struct Blob *stackB;
     char * list_of_operations;
 }Stack;
-
-
-typedef struct Chunk
-{
-	int		lower;
-	int		upper;
-}	Chunk;
-
-
 
 Stack * init_stack();
     
