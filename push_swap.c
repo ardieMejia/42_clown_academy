@@ -388,81 +388,24 @@ void fill_norm_index(Stack * game_stack)
 
 
 
-int rr_norm_index_check(Stack *game_stack){
-	if (!game_stack->stackA || !game_stack->stackB){
-		return 1;
-	}
-
-
-	/**
-	we push this to its own interfae
-	we push this to its own interfae
-	we push this to its own interfae
-	*/
-	Blob * last_a_blob = game_stack->stackA;
-	while (last_a_blob->next != NULL)
-	{
-		last_a_blob = last_a_blob->next;
-	}
-	Blob * last_b_blob = game_stack->stackB;
-	while (last_b_blob->next != NULL)
-	{
-		last_b_blob = last_b_blob->next;
-	}
-
-
-	if(get_stack_length(game_stack->stackA) != 1){		
-		Blob * temp_blob = game_stack->stackA;
-		game_stack->stackA = game_stack->stackA->next;
-		last_a_blob->next = temp_blob;
-		temp_blob->next = NULL;
-	}
-	
-	if(get_stack_length(game_stack->stackB) != 1){		
-		Blob * temp_blob = game_stack->stackB;
-		game_stack->stackB = game_stack->stackB->next;
-		last_a_blob->next = temp_blob;
-		temp_blob->next = NULL;
-	}
-
-
-	
-	
-	Blob * temp_blob = game_stack->stackA;
-	game_stack->stackA = game_stack->stackA->next;
-	temp_blob->next = game_stack->stackB;
-	game_stack->stackB = temp_blob;
-	
-	game_stack->list_of_operations = ft_strjoin(game_stack->list_of_operations, "rr\n");
-	return 0;       
-}
 
 
 
+Stack * create_game_stack(int * list_of_numbers, int length)
 
-
-/**
-we need need to test our lost cost effort
-we need need to test our lost cost effort
-we need need to test our lost cost effort
- */
-void experiment_while_more_than_3(Stack * game_stack)
 {
+	Stack *game_stack;
+		
+	game_stack = init_stack();
+	game_stack->list_of_operations = NULL;
+	fill_stack_values(game_stack, list_of_numbers, length);
 
 	fill_latest_cost(game_stack);
-	Blob * candidate_from_A = game_stack->stackA;
-	Blob * candidate_from_B = game_stack->stackB;
-
-	get_lowest_cost(game_stack, candidate_from_A, candidate_from_B);
-
-
-
+	fill_norm_index(game_stack);
+	return game_stack;
 	
-
-
-	candidate_from_A = NULL;
-	candidate_from_B = NULL;
 }
+
 
 
 int main (int argc, char **argv){
@@ -472,12 +415,13 @@ int main (int argc, char **argv){
 	Method method;
 	method = ADAPTIVE;
 	char * filtered_input = NULL;
-	int err;
 
-	Stack *game_stack;
+	// int err;
+
+
 	int * list_of_numbers;
 
-	err = 0;
+	// err = 0;
 	if(argc == 1){
 		printf("\n no arguments\n");
 		return 0;
@@ -492,6 +436,7 @@ int main (int argc, char **argv){
 
 	if(!process_valid_input(argc, argv, &number_input_start, &method))
 	{
+		write(1,"Error\n",6);
 		return 1;
 	}
 
@@ -510,14 +455,8 @@ int main (int argc, char **argv){
 
 	printf("\n he\n");
 	
-	game_stack = init_stack();
-	game_stack->list_of_operations = NULL;
-	fill_stack_values(game_stack, list_of_numbers, argc - number_input_start);
 
-	fill_latest_cost(game_stack);
-
-	fill_norm_index(game_stack);
-
+	Stack * game_stack = create_game_stack(list_of_numbers, argc - number_input_start);
 
 		
 
@@ -528,13 +467,17 @@ int main (int argc, char **argv){
 		// simple_while_more_than_3(game_stack);
 		start_simple(game_stack);
 	}else if(method == MEDIUM){		
-		err = push_2_to_b(game_stack);
-		if (err)
-			return 1;
+		// err = push_2_to_b(game_stack);
+		start_medium(game_stack);
+		// free(filtered_input);
+		// free(list_of_numbers);
+		// list_of_numbers = NULL;
+		// if (err)
+		// 	return 1;
+
 	}
 	else
 		return 1;
-		
 	
 
 
