@@ -409,25 +409,17 @@ Stack * create_game_stack(int * list_of_numbers, int length)
 
 
 int main (int argc, char **argv){
-
-
 	Method method;
 	method = ADAPTIVE;
 	char * filtered_input = NULL;
-	// int err;
-
 	int * list_of_numbers;
 
-	// err = 0;
 	if(argc == 1){
 		printf("\n no arguments\n");
 		return 0;
 	}
 
 	list_of_numbers = NULL;
-
-
-
 	int number_input_start = 1;
 
 	if(!process_valid_input(argc, argv, &number_input_start, &method))
@@ -437,35 +429,22 @@ int main (int argc, char **argv){
 	}
 
 	if (argc - number_input_start == 0)
-	{		
 		return 0;
-	}
+
 	list_of_numbers = (int * )malloc(sizeof(int) * (argc - number_input_start));
 
 	if (!is_all_numbers(argv+number_input_start, &list_of_numbers, argc - number_input_start)){
 		free(list_of_numbers);
 		return 1;
-	}	
-
-	printf("\n he\n");
-	
+	}
 	Stack * game_stack = create_game_stack(list_of_numbers, argc - number_input_start);
-		
 
+	
 	if(method == SIMPLE){
 		printf("\n simple\n");
-		// experiment_while_more_than_3(game_stack);
-		// simple_while_more_than_3(game_stack);
 		start_simple(game_stack);
-	}else if(method == MEDIUM){		
-		// err = push_2_to_b(game_stack);
+	}else if(method == MEDIUM){
 		start_medium(game_stack);
-		// free(filtered_input);
-		// free(list_of_numbers);
-		// list_of_numbers = NULL;
-		// if (err)
-		// 	return 1;
-
 	}
 	else
 		return 1;
@@ -477,14 +456,12 @@ int main (int argc, char **argv){
 	display_state_output(game_stack);
 	#endif
 
-
 	
 	free(filtered_input);
 	free(list_of_numbers);
 	list_of_numbers = NULL;
 
 	free_game(game_stack);
-
 
 
 	return 0;
