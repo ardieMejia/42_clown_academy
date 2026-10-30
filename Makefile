@@ -1,13 +1,14 @@
 TARGET=push_swap
 CC=gcc
 # OBJECTS=input_cleaner.o
+SRCS = push_swap.c simple.c medium.c
 
 $(TARGET): subdir
-	$(CC) -g -m64 push_swap.c simple/simple.c medium/medium.c -Lgetters -lgetters -Llibstructutils -lstructutils -Lliboperations -loperations -Llibft -lft -Werror -Wall -Wextra -o push_swap
+	$(CC) -g -m64  $(SRCS) -Lgetters -lgetters -Llibstructutils -lstructutils -Llibhardcode -lhardcode -Lliboperations -loperations -Llibft -lft -Werror -Wall -Wextra -o push_swap
 
 debug: subdir
 	# $(CC) -g -m64 -DDEBUG push_swap.c simple/simple.c medium/medium.c -Lgetters -lgetters -Llibstructutils -lstructutils -Llibft -lft -Lliboperations -loperations -Werror -Wall -Wextra -o push_swap
-	$(CC) -g -m64 -DDEBUG push_swap.c simple/simple.c medium/medium.c -Lgetters -lgetters -Llibstructutils -lstructutils -Lliboperations -loperations -Llibft -lft -Werror -Wall -Wextra -o push_swap
+	$(CC) -g -m64 -DDEBUG $(SRCS) -Lgetters -lgetters -Llibstructutils -lstructutils -Llibhardcode -lhardcode -Lliboperations -loperations -Llibft -lft -Werror -Wall -Wextra -o push_swap
 
 
 subdir:
@@ -15,6 +16,7 @@ subdir:
 	$(MAKE) -C libft
 	$(MAKE) -C getters
 	$(MAKE) -C liboperations
+	$(MAKE) -C libhardcode
 
 
 
@@ -29,6 +31,8 @@ clean: $(CLEANALL)
 	$(MAKE) -C libft clean
 	$(MAKE) -C getters clean
 	$(MAKE) -C liboperations clean
+	$(MAKE) -C libhardcode clean
+
 
 
 

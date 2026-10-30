@@ -135,3 +135,17 @@ int rb(Stack * game_stack){
 	return 0;
 
 }
+
+
+int sa(Stack * game_stack){
+	if (get_stack_length(game_stack->stackA) < 2)
+		return 1;
+	Blob * new_head = game_stack->stackA->next;
+	
+	game_stack->stackA->next = new_head->next;
+	new_head->next = game_stack->stackA;
+	game_stack->stackA = new_head;
+	
+	new_head = NULL;
+	return 0;
+}
